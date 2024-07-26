@@ -71,7 +71,7 @@ RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" >
 
 RUN npm install @odoo/owl@1.4.0 -y
 
-RUN npm install --global --save-dev prettier @prettier/plugin-xml
+RUN npm install --global --save-dev prettier @prettier/plugin-xml prettier-plugin-sql
 
 RUN python3 -m pip install --no-cache-dir setuptools wheel
 RUN python3 -m pip install --no-cache-dir debugpy pre-commit
