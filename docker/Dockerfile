@@ -1,4 +1,4 @@
-FROM python:3.8.10-buster
+FROM python:3.8-bullseye
 ARG DOCKER_ODOO_UID=1000  
 ARG DOCKER_ODOO_GID=1000
 # ARG CONFIG_TYPE=pycharm
@@ -33,8 +33,8 @@ RUN apt-get update && \
     fonts-noto-cjk \
     gnupg \
     libssl-dev \
-    node-less \
-    npm \
+    # node-less \
+    # npm \
     python3-num2words \
     python3-pdfminer \
     python3-pip \
@@ -60,18 +60,24 @@ RUN apt-get update && \
     man-db \
     manpages \
     manpages-dev \
-    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.buster_amd64.deb \
-    && echo 'ea8277df4297afc507c61122f3c349af142f31e5 wkhtmltox.deb' | sha1sum -c - \
+    && curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6.1-2/wkhtmltox_0.12.6.1-2.bullseye_amd64.deb \
+    && echo 'cecbf5a6abbd68d324a7cd6c51ec843d71e98951 wkhtmltox.deb' | sha1sum -c - \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
     && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
-RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt buster-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
+RUN sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main" > /etc/apt/sources.list.d/pgdg.list' \
     && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
     && apt update && apt install -y postgresql-client
 
-RUN npm install @odoo/owl@1.4.0 -y
+WORKDIR /usr/local/lib
 
-RUN npm install --global --save-dev prettier @prettier/plugin-xml prettier-plugin-sql
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g npm@latest
+
+RUN npm install @odoo/owl@1.0.4 && \
+    npm install global prettier @prettier/plugin-xml prettier-plugin-sql && \
+    npm cache clean --force
 
 RUN python3 -m pip install --no-cache-dir setuptools wheel
 RUN python3 -m pip install --no-cache-dir debugpy pre-commit
