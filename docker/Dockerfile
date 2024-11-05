@@ -89,9 +89,12 @@ RUN pip3 install --no-cache-dir -r /tmp/requirements.txt
 COPY simbioz_repo/extra_requirements.txt /tmp/extra_requirements.txt
 RUN pip3 install --no-cache-dir -r /tmp/extra_requirements.txt
 
-RUN groupadd --gid ${DOCKER_ODOO_GID} odoo && useradd odoo -u ${DOCKER_ODOO_UID} -g ${DOCKER_ODOO_GID} -m -s /bin/bash
-RUN usermod -aG sudo odoo
-RUN echo "odoo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/odoo && chmod 0440 /etc/sudoers.d/odoo
+RUN groupadd --gid ${DOCKER_ODOO_GID} odoo \
+    && useradd odoo -u ${DOCKER_ODOO_UID} -g ${DOCKER_ODOO_GID} -m -s /bin/bash \
+    && usermod -aG sudo odoo \
+    && echo "odoo ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/odoo \
+    && chmod 0440 /etc/sudoers.d/odoo \
+    && echo "export PATH=\"\$PATH:/home/odoo/.local/bin\"" >> /home/odoo/.bashrc
 
 COPY docker/entrypoint.sh /
 # COPY conf/odoo-server-${CONFIG_TYPE}.conf /etc/odoo/odoo-server.conf
