@@ -74,9 +74,8 @@ WORKDIR /usr/local/lib
 
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs && \
-    npm install -g npm@latest less
-
-RUN npm install @odoo/owl@1.0.4 && \
+    npm install -g npm@10 less && \
+    npm install @odoo/owl@1.0.4 && \
     npm install global prettier @prettier/plugin-xml prettier-plugin-sql && \
     npm cache clean --force
 
