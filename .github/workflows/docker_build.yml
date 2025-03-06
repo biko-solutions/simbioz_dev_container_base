@@ -26,4 +26,4 @@ jobs:
           context: .
           file: docker/Dockerfile
           push: true
-          tags: bikosolutions/developers_repo:latest,bikosolutions/developers_repo:2.0.8
+          tags: bikosolutions/developers_repo:latest,bikosolutions/developers_repo:2.0.9
