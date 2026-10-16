@@ -7,6 +7,9 @@ SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 
 ENV LANG C.UTF-8
 
+# Debian 11 is EOL: bullseye packages are served only from archive.debian.org
+RUN sed -i 's#http://deb.debian.org#http://archive.debian.org#' /etc/apt/sources.list
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     git \
